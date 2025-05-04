@@ -5,7 +5,7 @@ render-start:
 	gunicorn task_manager.wsgi
 
 install:
-	uv pip install
+	uv pip install --requirement pyproject.toml
 
 collectstatic:
 	python manage.py collectstatic --noinput
