@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-lxz#!s$q8-0hn-94wgvr05y1mbq+z4nz2#-7gu@dd^d&pl+s^f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['python-project-52-ptxg.onrender.com',]
+ALLOWED_HOSTS = ['python-project-52-ptxg.onrender.com', '127.0.0.1']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_bootstrap5',
     'task_manager',
 ]
 

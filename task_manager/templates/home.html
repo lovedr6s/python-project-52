@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-4">Welcome</h1>
+<div class="d-flex justify-content-left gap-3">
+    <a href="/home/" class='btn btn-primary'>Home</a>
+    <a href="/users/" class="btn btn-secondary">Users</a>
+    <a href="/login/" class="btn btn-success">Login</a>
+    <a href="/register/" class="btn btn-success">Register</a>
+</div>
+{% endblock %}

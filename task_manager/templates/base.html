@@ -1,0 +1,17 @@
+{% load django_bootstrap5 %}
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}MySite{% endblock %}</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
