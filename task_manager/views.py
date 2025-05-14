@@ -4,3 +4,43 @@ from django.views import View
 class HomeView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html')
+
+
+class UserListView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'user_list.html')
+    def post(self, request, *args, **kwargs):
+        return redirect('user_list')
+
+
+class UserCreateView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'user_form.html')
+    def post(self, request, *args, **kwargs):
+        return redirect('user_list')
+
+
+class UserUpdateView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'user_form.html')
+    def post(self, request, *args, **kwargs):
+        return redirect('user_list')
+
+
+class UserDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'user_confirm_delete.html')
+    def post(self, request, *args, **kwargs):
+        return redirect('user_list')
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        return redirect('home')
+
+
+class LoginView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'login.html')
+    def post(self, request, *args, **kwargs):
+        return redirect('home')
