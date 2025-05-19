@@ -5,25 +5,10 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html')
 
-
-class UserListView(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'user_list.html')
-    def post(self, request, *args, **kwargs):
-        return redirect('user_list')
-
-
-class UserCreateView(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'user_form.html')
-    def post(self, request, *args, **kwargs):
-        return redirect('user_list')
-
-
 class UserUpdateView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs): #обновление данных пользователя
         return render(request, 'user_form.html')
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): #обновление данных пользователя
         return redirect('user_list')
 
 

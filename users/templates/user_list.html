@@ -16,15 +16,14 @@
             </tr>
         </thead>
         <tbody>
-            {% for user in users %}
+            {% for user in user_list %}
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.fullname }}</td>
                 <td>{{ user.created_at }}</td>
                 <td>
-                    <a href="{% url 'user_detail' user.id %}" class="btn btn-info">View</a>
-                    <a href="{% url 'user_edit' user.id %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'user_update' user.id %}" class="btn btn-warning">Edit</a>
                     <form action="{% url 'user_delete' user.id %}" method="post" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Delete</button>
