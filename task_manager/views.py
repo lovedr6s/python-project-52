@@ -1,16 +1,19 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from users.models import User
-
+from users.forms import UserForm
+from django.contrib.auth.hashers import make_password, check_password
 
 class HomeView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html')
 
 class UserUpdateView(View):
-    def get(self, request, *args, **kwargs): #обновление данных пользователя
+    def get(self, request, *args, **kwargs):
+        if request.session.get('user_id') is None:
+            return redirect('login')
         return render(request, 'user_form.html')
-    def post(self, request, *args, **kwargs): #обновление данных пользователя
+    def post(self, request, *args, **kwargs):
         return redirect('user_list')
 
 
@@ -29,15 +32,16 @@ class UserListView(View):
 
 class UserCreateView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'user_form.html')
+        return render(request, 'user_form.html', context={'form': UserForm()})
     def post(self, request, *args, **kwargs):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        user = User(username=username, password=password, first_name=first_name, last_name=last_name)
-        user.save()
-        return redirect('login')
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.password = make_password(form.cleaned_data['password'])
+            user.save()
+            return redirect('login')
+        else:
+            return render(request, 'user_form.html', context={'form': form})
 
 
 class LoginView(View):
@@ -47,15 +51,16 @@ class LoginView(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = User.objects.filter(username=username, password=password).first()
-        if user:
+        if user and check_password(password, user.password):
             request.session['user_id'] = user.id
             return redirect('home')
         else:
-            return render(request, 'login.html', context={'error': 'Invalid data'})
+            return render(request, 'login.html', context={'error': 'Invalid login or password'})
 
 class UserDeleteView(View):
     def post(self, request, *args, **kwargs):
-        # нужна проверка на то в системе ли пользьователь
+        if request.session.get('user_id') is None:
+            return redirect('login')
         user_id = kwargs.get('pk')
         user = User.objects.get(id=user_id)
         user.delete()

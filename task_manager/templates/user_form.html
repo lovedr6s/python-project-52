@@ -9,23 +9,23 @@
     {% csrf_token %}
     <div class="form-group">
         <label for="first_name">Name</label>
-        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter name">
+        <input type="text" class="form-control" name="first_name" placeholder="Enter name"> 
     </div>
     <div class="form-group">
         <label for="last_name">Surname</label>
-        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter surname">
+        <input type="text" class="form-control" name="last_name" placeholder="Enter surname">
     </div> 
     <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
+        <input type="text" class="form-control" name="username" placeholder="Enter username">
     </div>
     <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+        <input type="password" class="form-control" name="password" placeholder="Enter password">
     </div>
     <div class="form-group">
-        <label for="check_password">Again password</label>
-        <input type="password" class="form-control" id="check_password" name="check_password" placeholder="Enter password">
+        <label for="confirm_password">Again password</label>
+        <input type="password" class="form-control" name="confirm_password" placeholder="Enter password">
     </div>
     <button style="margin-top: 20px;" type="submit" class="btn btn-primary">Register</button>
     <div id="error-message" style="color: red; display: none;"></div>
