@@ -1,33 +1,34 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from users.models import User
 from users.forms import UserForm
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
+
 
 class HomeView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html')
 
+
 class UserUpdateView(View):
     def get(self, request, *args, **kwargs):
-        if request.session.get('user_id') is None:
+        if not request.user.is_authenticated:
             return redirect('login')
-        return render(request, 'user_form.html')
+        return render(request, 'user_form.html', context={'form': UserForm(instance=request.user)})
     def post(self, request, *args, **kwargs):
-        return redirect('user_list')
-
-
-class LogoutView(View):
-    def get(self, request, *args, **kwargs):
-        if 'user_id' in request.session:
-            del request.session['user_id']
-        return redirect('home')
+        form = UserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('user_list')
+        return render(request, 'user_form.html', context={'form': form})
 
 
 class UserListView(View):
     def get(self, request, *args, **kwargs):
         user_list = User.objects.all()
-        return render(request, 'user_list.html', context={'user_list': user_list})
+        return render(request, 'user_list.html',
+                      context={'user_list': user_list})
 
 
 class UserCreateView(View):
@@ -36,30 +37,15 @@ class UserCreateView(View):
     def post(self, request, *args, **kwargs):
         form = UserForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.password = make_password(form.cleaned_data['password'])
-            user.save()
+            form.save()
             return redirect('login')
         else:
             return render(request, 'user_form.html', context={'form': form})
 
 
-class LoginView(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'login.html')
-    def post(self, request, *args, **kwargs):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = User.objects.filter(username=username, password=password).first()
-        if user and check_password(password, user.password):
-            request.session['user_id'] = user.id
-            return redirect('home')
-        else:
-            return render(request, 'login.html', context={'error': 'Invalid login or password'})
-
 class UserDeleteView(View):
     def post(self, request, *args, **kwargs):
-        if request.session.get('user_id') is None:
+        if not request.user.is_authenticated:
             return redirect('login')
         user_id = kwargs.get('pk')
         user = User.objects.get(id=user_id)
