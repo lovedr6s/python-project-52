@@ -70,8 +70,8 @@ class LabelDeleteView(View):
             messages.error(request, 'You must be logged in to delete a label.')
             return redirect('login')
         #получить все теги из tasks и если есть теги с этим label, то не удалять
-        if Task.objects.filter(tags=kwargs.get('pk')).exists():
-            messages.error(request, 'Cannot delete label because it is associated with tasks.')
+        if Label.objects.get(pk=kwargs.get('pk')).tasks.exists():
+            messages.error(request, 'Cannot delete label with associated tasks.')
             return redirect('label_list')
         label = Label.objects.get(pk=kwargs.get('pk'))
         label.delete()

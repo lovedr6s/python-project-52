@@ -43,6 +43,7 @@ class TaskCreateView(View):
             task = form.save(commit=False)
             task.author = request.user.username
             task.save()
+            form.save_m2m()
             messages.success(request, 'Task created successfully!')
             return redirect('task_list')  # Redirect to the task list after creation
         else:

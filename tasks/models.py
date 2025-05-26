@@ -6,9 +6,9 @@ from statuses.models import Status  # Assuming Statuses is a model in statuses a
 
 class Task(models.Model):
     name = models.CharField(max_length=255)
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True, blank=True)  # ForeignKey to Statuses model
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True, blank=True, related_name='tasks')  # ForeignKey to Statuses model
     author = models.CharField(max_length=100)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Assuming creator is a username
-    tags = models.ManyToManyField(Label, blank=True)  # Many-to-many relationship  Label
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='tasks')  # Assuming creator is a username
+    tags = models.ManyToManyField(Label, blank=True, related_name='tasks')  # Many-to-many relationship  Label
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import Status
+from tasks.models import Task
 from .forms import StatusForm
 from django.contrib import messages
 
@@ -62,6 +63,9 @@ class StatusDeleteView(View):
         if not request.user.is_authenticated:
                     messages.error(request, 'You must be logged in to delete a status.')
                     return redirect('login')
+        if Status.objects.get(pk=kwargs['pk']).tasks.exists():
+            messages.error(request, 'Cannot delete status with associated tasks.')
+            return redirect('status_list')
         status = Status.objects.get(pk=kwargs['pk'])
         status.delete()
         messages.success(request, 'Status deleted successfully!')
