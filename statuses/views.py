@@ -16,9 +16,15 @@ class StatusListView(View):
 
 class StatusCreateView(View):
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'You must be logged in to create a status.')
+            return redirect('login')
         form = StatusForm()
         return render(request, 'status_form.html', context={'form': form})
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'You must be logged in to create a status.')
+            return redirect('login')
         form = StatusForm(request.POST)
         if form.is_valid():
             form.save()
@@ -31,9 +37,15 @@ class StatusCreateView(View):
 
 class StatusUpdateView(View):
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'You must be logged in to update a status.')
+            return redirect('login')
         form = StatusForm(instance=Status.objects.get(pk=kwargs['pk']))
         return render(request, 'status_form.html', context={'form': form})
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'You must be logged in to update a status.')
+            return redirect('login')
         status = Status.objects.get(pk=kwargs['pk'])
         form = StatusForm(request.POST, instance=status)
         if form.is_valid():

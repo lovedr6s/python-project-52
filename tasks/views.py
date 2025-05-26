@@ -8,6 +8,7 @@ from .forms import TaskForm
 class TaskListView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
+            messages.error(request, 'You must be logged in to view tasks.')
             return redirect('login')
         task_list = Task.objects.all()
         return render(request, 'task_list.html', context={'task_list': task_list})
@@ -34,7 +35,9 @@ class TaskCreateView(View):
         return render(request, 'task_form.html', context={'form': form})
     
     def post(self, request, *args, **kwargs):
-        # Here you would handle the form submission to create a task
+        if not request.user.is_authenticated:
+            messages.error(request, 'You must be logged in to create a task.')
+            return redirect('login')
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
