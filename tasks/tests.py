@@ -10,8 +10,6 @@ class TaskViewTests(TestCase):
         self.client = Client()
         self.task = Task.objects.create(
             name='Test Task',
-            status='Open',
-            creator='testuser',
             author='testuser',
             description='This is a test task.',
         )
@@ -21,8 +19,6 @@ class TaskViewTests(TestCase):
     def test_task_create(self):
         response = self.client.post(reverse('task_create'), {
             'name': 'New Task',
-            'status': 'Open',
-            'creator': 'testuser',
             'description': 'This is a new task.',
         })
         self.assertEqual(response.status_code, 302)
@@ -38,14 +34,11 @@ class TaskViewTests(TestCase):
     def test_task_update(self):
         response = self.client.post(reverse('task_update', args=[self.task.id]), {
             'name': 'Updated Task',
-            'status': 'In Progress',
-            'creator': 'testuser',
             'description': 'This task has been updated.',
         })
         self.assertEqual(response.status_code, 302)
         self.task.refresh_from_db()
         self.assertEqual(self.task.name, 'Updated Task')
-        self.assertEqual(self.task.status, 'In Progress')
     
     def test_task_delete(self):
         response = self.client.post(reverse('task_delete', kwargs={'pk': self.task.id}))
