@@ -11,7 +11,7 @@ class UserUpdateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('login')
-        return render(request, 'user_form.html', context={'form': UserForm(instance=request.user)})
+        return render(request, 'user_form.html', context={'form': UserForm(instance=request.user), 'action': 'Update'})
     def post(self, request, *args, **kwargs):
         form = UserForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -31,7 +31,7 @@ class UserListView(View):
 
 class UserCreateView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'user_form.html', context={'form': UserForm()})
+        return render(request, 'user_form.html', context={'form': UserForm(), 'action': 'Create'})
     def post(self, request, *args, **kwargs):
         form = UserForm(request.POST)
         if form.is_valid():
