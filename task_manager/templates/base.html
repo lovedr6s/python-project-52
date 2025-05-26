@@ -19,7 +19,7 @@
             {% if user.is_authenticated %} <!--Нужно будет добавить проверку на вошел ли человек или нет-->
                 <a href="{% url 'status_list' %}" class="btn btn-success">Statuses</a>
                 <a href="#" class="btn btn-success">Labels</a>
-                <a href="#" class="btn btn-success">Tasks</a>
+                <a href="{% url 'task_list' %}" class="btn btn-success">Tasks</a>
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <button class="btn btn-success" type="submit">Logout</button>
