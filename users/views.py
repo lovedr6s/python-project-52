@@ -48,7 +48,7 @@ class UserDeleteView(View):
             messages.error(request, 'You must be logged in to delete a user.')
             return redirect('login')
         user = User.objects.get(id=kwargs.get('pk'))
-        if user.name != request.user.username:
+        if str(user) != str(request.user.username):
             messages.error(request, 'You can only delete your own account.')
             return redirect('user_list')
         user.delete()
