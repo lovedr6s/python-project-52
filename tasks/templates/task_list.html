@@ -5,10 +5,14 @@
 {% block content %}
 <h1>Task List</h1>
 <a href="{% url 'task_create' %}" class="btn btn-primary mb-3">Create New Task</a>
-<form method="get">
-    {{ filter.form.as_p }}
-    <button type="submit">Поиск</button>
-</form>
+<div class="card-body bg-white">
+    <form method="get" class="form-inline center">
+        <div class="mb-3">
+            {{ filter.form.as_p }}
+        <button type="submit">Search</button>
+        </div>
+    </form>
+</div>
 <table class="table table-striped">
     <thead>
         <tr>

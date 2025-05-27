@@ -4,10 +4,14 @@
 
 {% block content %}
 <h1>Task Detail</h1>
-<p><strong>Task ID:</strong> {{ task.id }}</p>
 <p><strong>Title:</strong> {{ task.name }}</p>
 <p><strong>Description:</strong> {{ task.description }}</p>
 <p><strong>Status:</strong> {{ task.status }}</p>
 <p><strong>Tags:</strong> {{ task.tags.all|join:", " }}</p>
 <p><strong>Created At:</strong> {{ task.created_at }}</p>
+<a href="{% url 'task_update' task.id %}" class="btn btn-warning">Edit</a>
+<form action="{% url 'task_delete' task.id %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
 {% endblock %}
