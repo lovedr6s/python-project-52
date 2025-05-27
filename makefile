@@ -2,13 +2,13 @@ build:
 	./build.sh
 
 render-start:
-	gunicorn task_manager.wsgi
+	gunicorn task_manager/task_manager.wsgi
 
 install:
 	uv pip install --requirement pyproject.toml
 
 collectstatic:
-	python manage.py collectstatic --noinput
+	python task_manager/manage.py collectstatic --noinput
 
 migrate:
-	python manage.py migrate
+	python task_manager/manage.py migrate
