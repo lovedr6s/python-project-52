@@ -5,6 +5,9 @@ class LabelForm(forms.ModelForm):
     class Meta:
         model = Label
         fields = ['name']
+        labels = {
+            'name': 'Имя',
+        }
     
     def clean_name(self):
         name = self.cleaned_data.get('name')

@@ -4,12 +4,12 @@
 
 {% block content %}
 <h1>Task List</h1>
-<a href="{% url 'task_create' %}" class="btn btn-primary mb-3">Create New Task</a>
+<a href="{% url 'task_create' %}" class="btn btn-primary mb-3">Создать задачу</a>
 <div class="card-body bg-white">
     <form method="get" class="form-inline center">
         <div class="mb-3">
             {{ filter.form.as_p }}
-        <button type="submit">Search</button>
+        <button type="submit">Показать</button>
         </div>
     </form>
 </div>
@@ -17,12 +17,12 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Author</th>
-            <th>Assignee</th>
-            <th>Created At</th>
-            <th>Actions</th>
+            <th>Имя</th>
+            <th>Статус</th>
+            <th>Автор</th>
+            <th>Исполнитель</th>
+            <th>Дата создания</th>
+            <th>Кнопочки</th>
         </tr>
     </thead>
     {% if task_list %}
@@ -36,14 +36,14 @@
                 <td>{{ task.assignee }}</td>
                 <td>{{ task.created_at }}</td>
                 <td>
-                    <a href="{% url 'task_update' task.id %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'task_update' task.id %}" class="btn btn-warning">Изменить</a>
                     <form action="{% url 'task_delete' task.id %}" method="post" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
                     </form>
                 </td>
             </tr>
-        {% empty %}
+        {% empty %} 
             <p>No statuses available.</p>
         {% endfor %}
     </tbody>

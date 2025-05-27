@@ -15,18 +15,18 @@ class TaskListView(FilterView):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to view tasks.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         return super().dispatch(request, *args, **kwargs)
 
 class TaskDetailView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to view task details.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         task = Task.objects.get(pk=kwargs.get('pk'))
         if not task:
-            messages.error(request, 'Task not found')
+            messages.error(request, 'Задача не найдена')
             return redirect('task_list')
         return render(request, 'task_detail.html', context={'task': task})
 
@@ -34,14 +34,14 @@ class TaskDetailView(View):
 class TaskCreateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to create a task.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = TaskForm()
         return render(request, 'task_form.html', context={'form': form})
     
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to create a task.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = TaskForm(request.POST)
         if form.is_valid():
@@ -49,7 +49,7 @@ class TaskCreateView(View):
             task.author = request.user
             task.save()
             form.save_m2m()
-            messages.success(request, 'Task created successfully!')
+            messages.success(request, 'Задача успешно создана')
             return redirect('task_list')  # Redirect to the task list after creation
         else:
             messages.error(request, 'There was an error creating the task. Please correct the errors below.')
@@ -59,7 +59,7 @@ class TaskCreateView(View):
 class TaskUpdateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to update a task.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         task = Task.objects.get(pk=kwargs.get('pk'))
         form = TaskForm(instance=task)
@@ -69,13 +69,13 @@ class TaskUpdateView(View):
     def post(self, request, *args, **kwargs):
         # Here you would handle the form submission to update a task
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to update a task.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = TaskForm(request.POST, instance=Task.objects.get(pk=kwargs.get('pk')))
         if form.is_valid():
             form.save()
             form.save_m2m()
-            messages.success(request, 'Task updated successfully!')
+            messages.success(request, 'Задача успешно изменена')
             return redirect('task_list')  # Redirect to the task list after update
         else:
             messages.error(request, 'There was an error updating the task. Please correct the errors below.')
@@ -85,13 +85,13 @@ class TaskUpdateView(View):
 class TaskDeleteView(View):
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to delete a task.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         # Here you would handle the deletion of a task
         task = Task.objects.get(pk=kwargs.get('pk'))
         if task.author != request.user:
-            messages.error(request, 'You do not have permission to delete this task.')
+            messages.error(request, 'Задачу может удалить только ее автор')
             return redirect('task_list')  # добавить ошибку
         task.delete()
-        messages.success(request, 'Task deleted successfully!')
+        messages.success(request, 'Задача успешно удалена')
         return redirect('task_list')  # Redirect to the task list after deletion

@@ -10,7 +10,7 @@ from django.contrib import messages
 class LabelViews(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to view labels.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         labels = Label.objects.all()
         return render(request, 'label_list.html', context={'labels': labels})
@@ -19,19 +19,19 @@ class LabelViews(View):
 class LabelCreateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to create a label.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = LabelForm()
         return render(request, 'label_form.html', context={'form': form})
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to create a label.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = LabelForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Label created successfully!')
+            messages.success(request, 'Метка успешно создана')
             return redirect('label_list')
         else:
             messages.error(request, 'There was an error creating the label. Please correct the errors below.')
@@ -41,23 +41,23 @@ class LabelCreateView(View):
 class LabelUpdateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to update a label.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = LabelForm(instance=Label.objects.get(pk=kwargs.get('pk')))
         if not form:
-            messages.error(request, 'Label not found')
+            messages.error(request, 'Метка не найдена')
             return redirect('label_list')
         
         return render(request, 'label_form.html', context={'form': form})
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to update a label.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = LabelForm(request.POST, instance=Label.objects.get(pk=kwargs.get('pk')))
         if form.is_valid():
             form.save()
-            messages.success(request, 'Label updated successfully!')
+            messages.success(request, 'Метка успешно изменена')
             return redirect('label_list')
         else:
             messages.error(request, 'There was an error updating the label. Please correct the errors below.')
@@ -67,13 +67,13 @@ class LabelUpdateView(View):
 class LabelDeleteView(View):
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'You must be logged in to delete a label.')
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         #получить все теги из tasks и если есть теги с этим label, то не удалять
         if Label.objects.get(pk=kwargs.get('pk')).tasks.exists():
-            messages.error(request, 'Cannot delete label with associated tasks.')
+            messages.error(request, 'Невозможно удалить метку, потому что она используется')
             return redirect('label_list')
         label = Label.objects.get(pk=kwargs.get('pk'))
         label.delete()
-        messages.success(request, 'Label deleted successfully!')
+        messages.success(request, 'Метка успешно удалена')
         return redirect('label_list')

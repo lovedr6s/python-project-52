@@ -3,10 +3,10 @@
 {% block title %}Create Status{% endblock %}
 
 {% block content %}
-<h1>Create Status</h1>
+<h1>Создать статус</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Create</button>
+    <button type="submit" class="btn btn-success">Создать</button>
 </form>
 {% endblock %}

@@ -5,11 +5,14 @@ class StatusForm(forms.ModelForm):
     class Meta:
         model = Status
         fields = ['name']
+        labels = {
+            'name': 'Имя',
+        }
 
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if Status.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
-            raise forms.ValidationError("Status with this name already exists.")
+            raise forms.ValidationError("Cтатус с таким именем уже существует.")
         return name
 
     def save(self, commit=True):

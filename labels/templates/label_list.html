@@ -3,15 +3,15 @@
 {% block title %}Label List{% endblock %}
 
 {% block content %}
-<h1>Label List</h1>
-<a href="{% url 'label_create' %}" class="btn btn-primary mb-3">Create New Label</a>
+<h1>Метки</h1>
+<a href="{% url 'label_create' %}" class="btn btn-primary mb-3">Создать метку</a>
 <table class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Created</th>
-            <th>Actions</th>
+            <th>Имя</th>
+            <th>Дата создания</th>
+            <th>Кнопочки</th>
         </tr>
     </thead>
     <tbody>
@@ -21,10 +21,10 @@
             <td>{{ label.name }}</td>
             <td>{{ label.created_at }}</td>
             <td>
-                <a href="{% url 'label_update' label.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'label_update' label.id %}" class="btn btn-warning">Изменить</a>
                 <form action="{% url 'label_delete' label.id %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Удалить</button>
                 </form>
             </td>
         </tr>
