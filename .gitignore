@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+.env
+db.sqlite3
+.log
+uv.lock
+.python-version
+.vscode/
+staticfiles/
