@@ -8,17 +8,18 @@ from django.contrib.auth.models import User
 class TaskViewTests(TestCase):
     def setUp(self):
         self.client = Client()
+        self.user = User.objects.create_user(username='testuser', first_name='name', last_name='last_name', password='testpassword')
         self.task = Task.objects.create(
             name='Test Task',
-            author='testuser',
+            author=self.user,
             description='This is a test task.',
         )
-        self.user = User.objects.create_user(username='testuser', first_name='name', last_name='last_name', password='testpassword')
         self.client.login(username='testuser', password='testpassword')
     
     def test_task_create(self):
         response = self.client.post(reverse('task_create'), {
             'name': 'New Task',
+            'author': self.user,
             'description': 'This is a new task.',
         })
         self.assertEqual(response.status_code, 302)

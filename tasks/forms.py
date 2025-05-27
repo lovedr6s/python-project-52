@@ -10,7 +10,7 @@ class TaskForm(forms.ModelForm):
     )
     class Meta:
         model = Task
-        fields = ['name', 'description', 'status', 'creator', 'tags']
+        fields = ['name', 'description', 'status', 'assignee', 'tags']
     
     def clean_name(self):
         name = self.cleaned_data.get('name')

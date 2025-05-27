@@ -1,18 +1,23 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
+from django_filters.views import FilterView
+from .filters import TaskFilter
 from .models import Task
 from .forms import TaskForm
 
 
-class TaskListView(View):
-    def get(self, request, *args, **kwargs):
+class TaskListView(FilterView):
+    model = Task
+    template_name = 'task_list.html'
+    context_object_name = 'task_list'
+    filterset_class = TaskFilter
+
+    def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'You must be logged in to view tasks.')
             return redirect('login')
-        task_list = Task.objects.all()
-        return render(request, 'task_list.html', context={'task_list': task_list})
-
+        return super().dispatch(request, *args, **kwargs)
 
 class TaskDetailView(View):
     def get(self, request, *args, **kwargs):
@@ -41,7 +46,7 @@ class TaskCreateView(View):
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
-            task.author = request.user.username
+            task.author = request.user
             task.save()
             form.save_m2m()
             messages.success(request, 'Task created successfully!')
@@ -69,6 +74,7 @@ class TaskUpdateView(View):
         form = TaskForm(request.POST, instance=Task.objects.get(pk=kwargs.get('pk')))
         if form.is_valid():
             form.save()
+            form.save_m2m()
             messages.success(request, 'Task updated successfully!')
             return redirect('task_list')  # Redirect to the task list after update
         else:
@@ -83,7 +89,7 @@ class TaskDeleteView(View):
             return redirect('login')
         # Here you would handle the deletion of a task
         task = Task.objects.get(pk=kwargs.get('pk'))
-        if task.author != request.user.username:
+        if task.author != request.user:
             messages.error(request, 'You do not have permission to delete this task.')
             return redirect('task_list')  # добавить ошибку
         task.delete()
