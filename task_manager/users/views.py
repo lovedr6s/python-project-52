@@ -4,7 +4,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from .forms import UserForm
 from django.contrib import messages
-from tasks.models import Task
+from task_manager.tasks.models import Task
 
 
 # Create your views here.

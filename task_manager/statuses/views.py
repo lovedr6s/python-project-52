@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import Status
-from tasks.models import Task
+from task_manager.tasks.models import Task
 from .forms import StatusForm
 from django.contrib import messages
 

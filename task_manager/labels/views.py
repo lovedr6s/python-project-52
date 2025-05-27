@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .models import Label 
 from .forms import LabelForm
-from tasks.models import Task
 from django.contrib import messages 
 # Create your views here.
 # МЕТКИ МОЖНО СОЗДАВАТЬ ТОЛЬКО ТУТ!!! В TASKS ЗАПРЕТИТЬ ВПИСЫВАТЬ И ДАТЬ ТОЛЬКО ВЫБИРАТЬ ИЗ ДОБАВЛЕННЫХ ТУТ
