@@ -1,0 +1,9 @@
+from .views import *
+from django.urls import path
+
+urlpatterns = [
+    path('', LabelViews.as_view(), name='label_list'),
+    path('create/', LabelCreateView.as_view(), name='label_create'),
+    path('update/<int:pk>/', LabelUpdateView.as_view(), name='label_update'),
+    path('delete/<int:pk>/', LabelDeleteView.as_view(), name='label_delete'),
+]
