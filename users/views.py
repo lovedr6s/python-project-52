@@ -13,10 +13,10 @@ class UserUpdateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('login')
-        if str(request.user) != str(kwargs.get('username')):
+        if str(request.user.id) != str(kwargs.get('pk')):
             messages.error(request, 'У вас нет прав для изменения другого пользователя.')
             return redirect('user_list')
-        return render(request, 'user_form.html', context={'form': UserForm(instance=request.user), 'action': 'Изменить Пользователя'})
+        return render(request, 'user_form.html', context={'form': UserForm(instance=request.user), 'action': 'Изменить пользователя'})
     def post(self, request, *args, **kwargs):
         form = UserForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -24,7 +24,7 @@ class UserUpdateView(View):
             update_session_auth_hash(request, user)
             messages.success(request, 'Пользователь успешно изменен')
             return redirect('user_list')
-        return render(request, 'user_form.html', context={'form': form})
+        return render(request, 'user_form.html', context={'form': form, 'action': 'Изменить пользователя'})
 
 
 class UserListView(View):
@@ -44,7 +44,7 @@ class UserCreateView(View):
             messages.success(request, 'Пользователь успешно создан')
             return redirect('login')
         else:
-            return render(request, 'user_form.html', context={'form': form})
+            return render(request, 'user_form.html', context={'form': form, 'action': 'Создать пользователя'})
 
 
 class UserDeleteView(View):

@@ -21,7 +21,7 @@ class StatusCreateView(View):
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = StatusForm()
-        return render(request, 'status_form.html', context={'form': form})
+        return render(request, 'status_form.html', context={'form': form, 'action': 'Создать статус'})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
@@ -42,7 +42,7 @@ class StatusUpdateView(View):
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = StatusForm(instance=Status.objects.get(pk=kwargs['pk']))
-        return render(request, 'status_form.html', context={'form': form})
+        return render(request, 'status_form.html', context={'form': form, 'action': 'Изменить статус'})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')

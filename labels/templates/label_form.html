@@ -3,10 +3,10 @@
 {% block title %}Label Form{% endblock %}
 
 {% block content %}
-<h1>Label Form</h1>
+<h1>{{ action }}</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Create Label</button>
+    <button type="submit" class="btn btn-success">{{ action }}</button>
 </form>
 {% endblock %}

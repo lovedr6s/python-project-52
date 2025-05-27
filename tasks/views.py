@@ -37,7 +37,7 @@ class TaskCreateView(View):
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = TaskForm()
-        return render(request, 'task_form.html', context={'form': form})
+        return render(request, 'task_form.html', context={'form': form, 'action': 'Создать задачу'})
     
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -53,7 +53,7 @@ class TaskCreateView(View):
             return redirect('task_list')  # Redirect to the task list after creation
         else:
             messages.error(request, 'There was an error creating the task. Please correct the errors below.')
-            return render(request, 'task_form.html', context={'form': form})
+            return render(request, 'task_form.html', context={'form': form, 'action': 'Создать задачу'})
 
 
 class TaskUpdateView(View):
@@ -64,7 +64,7 @@ class TaskUpdateView(View):
         task = Task.objects.get(pk=kwargs.get('pk'))
         form = TaskForm(instance=task)
 
-        return render(request, 'task_form.html', context={'form': form})
+        return render(request, 'task_form.html', context={'form': form, 'action': 'Изменить задачу'})
     
     def post(self, request, *args, **kwargs):
         # Here you would handle the form submission to update a task
@@ -79,7 +79,7 @@ class TaskUpdateView(View):
             return redirect('task_list')  # Redirect to the task list after update
         else:
             messages.error(request, 'There was an error updating the task. Please correct the errors below.')
-            return render(request, 'task_form.html', context={'form': form})
+            return render(request, 'task_form.html', context={'form': form, 'action': 'Изменить задачу'})
 
 
 class TaskDeleteView(View):

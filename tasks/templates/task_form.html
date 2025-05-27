@@ -3,10 +3,10 @@
 {% block title %}Task Form{% endblock %}
 
 {% block content %}
-<h1>Изменение задачи</h1>
+<h1>{{ action }}</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Изменить</button>
+    <button type="submit">{{ action }}</button>
 </form>
 {% endblock %}
