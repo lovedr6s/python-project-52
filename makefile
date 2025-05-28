@@ -11,4 +11,4 @@ collectstatic:
 	python manage.py collectstatic --noinput
 
 migrate:
-	python manage.py migrate
+	docker compose run --rm app uv run python manage.py migrate
