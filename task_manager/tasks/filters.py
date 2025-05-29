@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class TaskFilter(filters.FilterSet):
     status = filters.ModelChoiceFilter(queryset=Status.objects.all(), label='Статус')
     assignee = filters.ModelChoiceFilter(queryset=User.objects.all(), label='Исполнитель')
-    labels = filters.ModelChoiceFilter(queryset=Label.objects.all(), field_name='tags', label='Метки')
+    labels = filters.ModelChoiceFilter(queryset=Label.objects.all(), field_name='tags', label='Метка')
     my_tasks_only = filters.BooleanFilter(
         label='Только свои задачи',
         widget=forms.CheckboxInput,

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .forms import UserForm
 from django.contrib import messages
 from task_manager.tasks.models import Task
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 
 # Create your views here.
 
@@ -68,3 +68,9 @@ class CustomLoginView(LoginView):
     def form_valid(self, form):
         messages.success(self.request, 'Вы залогинены')
         return super().form_valid(form)
+
+
+class CustomLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, 'Вы разлогинены')
+        return super().dispatch(request, *args, **kwargs)
