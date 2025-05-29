@@ -4,14 +4,45 @@
 
 {% block content %}
 <h1>Вход</h1>
+
+{# Блок для системных сообщений (например, messages.success и т.д.) #}
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+{# Показываем общие ошибки формы (например, неверный логин/пароль) #}
+{% if form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in form.non_field_errors %}
+      {{ error }}
+    {% endfor %}
+  </div>
+{% endif %}
+
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <div class="mb-3">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {% for error in form.username.errors %}
+            <div class="alert alert-danger mt-1">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="mb-3">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {% for error in form.password.errors %}
+            <div class="alert alert-danger mt-1">{{ error }}</div>
+        {% endfor %}
+    </div>
+
     <button type="submit" class="btn btn-success">Войти</button>
 </form>
-    <div id="error-message" style="color: red;">
-        {% if error %}
-            {{ error }}
-        {% endif %}
-    </div>
 {% endblock %}

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .forms import UserForm
 from django.contrib import messages
 from task_manager.tasks.models import Task
-
+from django.contrib.auth.views import LoginView
 
 # Create your views here.
 
@@ -62,3 +62,9 @@ class UserDeleteView(View):
         user.delete()
         messages.success(request, 'Пользователь успешно удален')
         return redirect('user_list')
+    
+
+class CustomLoginView(LoginView):
+    def form_valid(self, form):
+        messages.success(self.request, 'Вы залогинены')
+        return super().form_valid(form)
