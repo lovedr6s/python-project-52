@@ -16,7 +16,7 @@ class UserUpdateView(View):
         if str(request.user.id) != str(kwargs.get('pk')):
             messages.error(request, 'У вас нет прав для изменения другого пользователя.')
             return redirect('user_list')
-        return render(request, 'user_form.html', context={'form': UserForm(instance=request.user), 'action': 'Изменить пользователя'})
+        return render(request, 'user_form.html', context={'form': UserForm(instance=request.user), 'action': 'Изменение пользователя', 'button_action': 'Изменить'})
     def post(self, request, *args, **kwargs):
         form = UserForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -24,7 +24,7 @@ class UserUpdateView(View):
             update_session_auth_hash(request, user)
             messages.success(request, 'Пользователь успешно изменен')
             return redirect('user_list')
-        return render(request, 'user_form.html', context={'form': form, 'action': 'Изменить пользователя'})
+        return render(request, 'user_form.html', context={'form': form, 'action': 'Изменение пользователя', 'button_action': 'Изменить'})
 
 
 class UserListView(View):
@@ -36,7 +36,7 @@ class UserListView(View):
 
 class UserCreateView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'user_form.html', context={'form': UserForm(), 'action': 'Создать пользователя'})
+        return render(request, 'user_form.html', context={'form': UserForm(), 'action': 'Регистрация', 'button_action': 'Зарегистрировать'})
     def post(self, request, *args, **kwargs):
         form = UserForm(request.POST)
         if form.is_valid():
@@ -44,7 +44,7 @@ class UserCreateView(View):
             messages.success(request, 'Пользователь успешно создан')
             return redirect('login')
         else:
-            return render(request, 'user_form.html', context={'form': form, 'action': 'Создать пользователя'})
+            return render(request, 'user_form.html', context={'form': form, 'action': 'Регистрация', 'button_action': 'Зарегистрировать'})
 
 
 class UserDeleteView(View):
