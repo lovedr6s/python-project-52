@@ -5,7 +5,13 @@ from django.contrib.auth.forms import AuthenticationForm
 class UserForm(forms.ModelForm):
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput, min_length=8)
     password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput, min_length=8)
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Имя пользователя'})
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Имя'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Фамилия'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Пароль'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Подтверждение пароля'})
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name']
@@ -47,8 +53,8 @@ class UserForm(forms.ModelForm):
         return user
 
 class CustomAuthForm(AuthenticationForm):
-    username = forms.CharField(label='Имя пользователя', max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    username = forms.CharField(label='Имя пользователя', max_length=150, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя пользователя'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Пароль'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
