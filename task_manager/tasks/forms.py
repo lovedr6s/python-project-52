@@ -23,11 +23,12 @@ class TaskForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'placeholder': 'Имя'})
+        self.fields['description'].widget.attrs.update({'placeholder': 'Описание'})
         for name, field in self.fields.items():
             widget = field.widget
 
             if isinstance(widget, forms.CheckboxSelectMultiple):
-                # Bootstrap для чекбоксов можно добавить тут при желании
                 widget.attrs.update({'class': 'form-check-input'})
             elif isinstance(widget, forms.Select):
                 widget.attrs.update({'class': 'form-select'})
