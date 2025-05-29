@@ -48,6 +48,18 @@ class UserCreateView(View):
 
 
 class UserDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            return redirect('login')
+        user = User.objects.get(id=kwargs.get('pk'))
+        if str(user) != str(request.user.username):
+            messages.error(request, 'У вас нет прав для удаления другого пользователя.')
+            return redirect('user_list')
+        if Task.objects.filter(author=user).exists():
+            messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
+            return redirect('user_list')
+        return render(request, 'user_delete.html', context={'user': user})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')

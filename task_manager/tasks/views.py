@@ -83,6 +83,18 @@ class TaskUpdateView(View):
 
 
 class TaskDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            return redirect('login')
+        task = Task.objects.get(pk=kwargs.get('pk'))
+        if not task:
+            messages.error(request, 'Задача не найдена')
+            return redirect('task_list')
+        if task.author != request.user:
+            messages.error(request, 'Задачу может удалить только ее автор')
+            return redirect('task_list')  # добавить ошибку
+        return render(request, 'task_delete.html', context={'task': task})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')

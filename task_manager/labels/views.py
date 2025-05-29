@@ -64,6 +64,15 @@ class LabelUpdateView(View):
 
 
 class LabelDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            return redirect('login')
+        label = Label.objects.get(pk=kwargs.get('pk'))
+        if not label:
+            messages.error(request, 'Метка не найдена')
+            return redirect('label_list')
+        return render(request, 'label_delete.html', context={'label': label})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')

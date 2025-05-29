@@ -54,10 +54,7 @@
                 <td>{{ task.created_at }}</td>
                 <td>
                     <a href="{% url 'task_update' task.id %}" class="btn btn-warning">Изменить</a>
-                    <form action="{% url 'task_delete' task.id %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Удалить</button>
-                    </form>
+                    <a href="{% url 'task_delete' task.id %}" class="btn btn-danger">Удалить</a>
                 </td>
             </tr>
         {% empty %} 

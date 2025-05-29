@@ -59,6 +59,15 @@ class StatusUpdateView(View):
 
 
 class StatusDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            return redirect('login')
+        status = Status.objects.get(pk=kwargs['pk'])
+        if not status:
+            messages.error(request, 'Статус не найден')
+            return redirect('status_list')
+        return render(request, 'status_delete.html', context={'status': status})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
                     messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')

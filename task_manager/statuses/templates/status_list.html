@@ -22,10 +22,7 @@
                 <td>{{ status.created_at }}</td>
                 <td>
                     <a href="{% url 'status_update' status.id %}" class="btn btn-warning">Изменить</a>
-                    <form action="{% url 'status_delete' status.id %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Удалить</button>
-                    </form>
+                    <a href="{% url 'status_delete' status.id %}" class="btn btn-danger">Удалить</a>
                 </td>
             </tr>
         {% empty %}

@@ -23,10 +23,7 @@
             <td>{{ user.date_joined }}</td>
             <td>
                 <a href="{% url 'user_update' user.id %}" class="btn btn-warning">Изменить</a>
-                <form action="{% url 'user_delete' user.id %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Удалить</button>
-                </form>
+                <a href="{% url 'user_delete' user.id %}" class="btn btn-danger">Удалить</a>
             </td>
         </tr>
         {% endfor %}

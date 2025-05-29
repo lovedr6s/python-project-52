@@ -22,10 +22,7 @@
             <td>{{ label.created_at }}</td>
             <td>
                 <a href="{% url 'label_update' label.id %}" class="btn btn-warning">Изменить</a>
-                <form action="{% url 'label_delete' label.id %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Удалить</button>
-                </form>
+                <a href="{% url 'label_delete' label.id %}" class="btn btn-danger">Удалить</a>
             </td>
         </tr>
         {% endfor %}
