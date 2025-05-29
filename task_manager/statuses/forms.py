@@ -8,7 +8,9 @@ class StatusForm(forms.ModelForm):
         labels = {
             'name': 'Имя',
         }
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'placeholder': 'Имя', 'class': 'form-control'})
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if Status.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
