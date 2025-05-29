@@ -21,7 +21,7 @@ class LabelCreateView(View):
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = LabelForm()
-        return render(request, 'label_form.html', context={'form': form, 'action': 'Создать метку'})
+        return render(request, 'label_form.html', context={'form': form, 'action': 'Создать метку', 'button_action': 'Создать'})
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -34,7 +34,7 @@ class LabelCreateView(View):
             return redirect('label_list')
         else:
             messages.error(request, 'There was an error creating the label. Please correct the errors below.')
-            return request(request, 'label_form.html', context={'form': form, 'action': 'Создать метку'})
+            return request(request, 'label_form.html', context={'form': form, 'action': 'Создать метку', 'button_action': 'Создать'})
 
 
 class LabelUpdateView(View):
@@ -47,7 +47,7 @@ class LabelUpdateView(View):
             messages.error(request, 'Метка не найдена')
             return redirect('label_list')
         
-        return render(request, 'label_form.html', context={'form': form, 'action': 'Изменить метку'})
+        return render(request, 'label_form.html', context={'form': form, 'action': 'Изменение метки', 'button_action': 'Изменить'})
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -60,7 +60,7 @@ class LabelUpdateView(View):
             return redirect('label_list')
         else:
             messages.error(request, 'There was an error updating the label. Please correct the errors below.')
-            return render(request, 'label_form.html', context={'form': form, 'action': 'Изменить метку'})
+            return render(request, 'label_form.html', context={'form': form, 'action': 'Изменение метки', 'button_action': 'Изменить'})
 
 
 class LabelDeleteView(View):

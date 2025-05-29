@@ -21,7 +21,7 @@ class StatusCreateView(View):
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = StatusForm()
-        return render(request, 'status_form.html', context={'form': form, 'action': 'Создать статус'})
+        return render(request, 'status_form.html', context={'form': form, 'action': 'Создать статус', 'button_action': 'Создать'})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
@@ -33,7 +33,7 @@ class StatusCreateView(View):
             return redirect('status_list')
         else:
             messages.error(request, 'There was an error creating the status. Please correct the errors below.')
-            return render(request, 'status_form.html', context={'form': form})
+            return render(request, 'status_form.html', context={'form': form, 'action': 'Создать статус', 'button_action': 'Создать'})
 
 
 class StatusUpdateView(View):
@@ -42,7 +42,7 @@ class StatusUpdateView(View):
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
             return redirect('login')
         form = StatusForm(instance=Status.objects.get(pk=kwargs['pk']))
-        return render(request, 'status_form.html', context={'form': form, 'action': 'Изменить статус'})
+        return render(request, 'status_form.html', context={'form': form, 'action': 'Изменение статуса', 'button_action': 'Изменить'})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
@@ -55,7 +55,7 @@ class StatusUpdateView(View):
             return redirect('status_list')
         else:
             messages.error(request, 'There was an error updating the status. Please correct the errors below.')
-            return render(request, 'status_form.html', context={'form': form})
+            return render(request, 'status_form.html', context={'form': form, 'action': 'Изменение статуса', 'button_action': 'Изменить'})
 
 
 class StatusDeleteView(View):
