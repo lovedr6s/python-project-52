@@ -21,7 +21,9 @@
                 {% endfor %}
             </div>
             {% else %}
+                <label class="form-label" for="{{ field.id_for_label }}">
                 {{ field }}
+                </label>
             {% endif %}
 
             {% if field.help_text %}
