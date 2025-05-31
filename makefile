@@ -2,10 +2,10 @@ build:
 	./build.sh
 
 render-start:
-	uv run gunicorn task_manager.wsgi
+	gunicorn task_manager.wsgi
 
 install:
-	uv pip install --requirement pyproject.toml
+	uv pip install -r requirements.txt
 
 collectstatic:
 	uv run python manage.py collectstatic --noinput
