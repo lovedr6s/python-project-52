@@ -29,7 +29,7 @@ class LabelFormMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['action'] = getattr(self, 'action_label', 'Действие')
+        context['action'] = getattr(self, 'action_label', 'Изменить')
         context['button_action'] = getattr(self, 'button_label', 'Сохранить')
         return context
 
