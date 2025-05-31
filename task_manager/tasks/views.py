@@ -1,110 +1,96 @@
-from django.shortcuts import render, redirect
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.contrib import messages
-from django.views import View
-from django_filters.views import FilterView
-from .filters import TaskFilter
+from django.shortcuts import redirect
 from .models import Task
 from .forms import TaskForm
+from .filters import TaskFilter
+from django_filters.views import FilterView
 
-NOT_AUTHORIZED_MESSAGE = 'Вы не авторизованы! Пожалуйста, выполните вход.'
+# Общий миксин с сообщением об ошибке при неавторизованном доступе
+class MessageLoginRequiredMixin(LoginRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'next'
 
-class TaskListView(FilterView):
+    def handle_no_permission(self):
+        messages.error(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+        return redirect(self.login_url)
+
+
+class TaskListView(MessageLoginRequiredMixin, FilterView):
     model = Task
     template_name = 'task_list.html'
     context_object_name = 'task_list'
     filterset_class = TaskFilter
 
+
+class TaskDetailView(MessageLoginRequiredMixin, DetailView):
+    model = Task
+    template_name = 'task_detail.html'
+    context_object_name = 'task'
+
+
+class TaskCreateView(MessageLoginRequiredMixin, CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'task_form.html'
+    success_url = reverse_lazy('task_list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        messages.success(self.request, 'Задача успешно создана')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Ошибка при создании задачи. Проверьте форму.')
+        return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({'action': 'Создать задачу', 'button_action': 'Создать'})
+        return context
+
+
+class TaskUpdateView(MessageLoginRequiredMixin, UpdateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'task_form.html'
+    success_url = reverse_lazy('task_list')
+
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, NOT_AUTHORIZED_MESSAGE)
-            return redirect('login')
+        task = self.get_object()
+        if task.author != request.user:
+            messages.error(request, 'Вы не можете редактировать чужую задачу')
+            return redirect('task_list')
         return super().dispatch(request, *args, **kwargs)
 
-class TaskDetailView(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, NOT_AUTHORIZED_MESSAGE)
-            return redirect('login')
-        task = Task.objects.get(pk=kwargs.get('pk'))
-        if not task:
-            messages.error(request, 'Задача не найдена')
-            return redirect('task_list')
-        return render(request, 'task_detail.html', context={'task': task})
+    def form_valid(self, form):
+        messages.success(self.request, 'Задача успешно изменена')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Ошибка при изменении задачи. Проверьте форму.')
+        return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({'action': 'Изменение задачи', 'button_action': 'Изменить'})
+        return context
 
 
-class TaskCreateView(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, NOT_AUTHORIZED_MESSAGE)
-            return redirect('login')
-        form = TaskForm()
-        return render(request, 'task_form.html', context={'form': form, 'action': 'Создать задачу', 'button_action': 'Создать'})
-    
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, NOT_AUTHORIZED_MESSAGE)
-            return redirect('login')
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            task = form.save(commit=False)
-            task.author = request.user
-            task.save()
-            form.save_m2m()
-            messages.success(request, 'Задача успешно создана')
-            return redirect('task_list')  # Redirect to the task list after creation
-        else:
-            messages.error(request, 'There was an error creating the task. Please correct the errors below.')
-            return render(request, 'task_form.html', context={'form': form, 'action': 'Создать задачу', 'button_action': 'Создать'})
+class TaskDeleteView(MessageLoginRequiredMixin, DeleteView):
+    model = Task
+    template_name = 'task_delete.html'
+    success_url = reverse_lazy('task_list')
 
-
-class TaskUpdateView(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, NOT_AUTHORIZED_MESSAGE)
-            return redirect('login')
-        task = Task.objects.get(pk=kwargs.get('pk'))
-        form = TaskForm(instance=task)
-
-        return render(request, 'task_form.html', context={'form': form, 'action': 'Изменение задачи', 'button_action': 'Изменить'})
-    
-    def post(self, request, *args, **kwargs):
-        # Here you would handle the form submission to update a task
-        if not request.user.is_authenticated:
-            messages.error(request, NOT_AUTHORIZED_MESSAGE)
-            return redirect('login')
-        form = TaskForm(request.POST, instance=Task.objects.get(pk=kwargs.get('pk')))
-        if form.is_valid():
-            form.save()
-            form.save_m2m()
-            messages.success(request, 'Задача успешно изменена')
-            return redirect('task_list')  # Redirect to the task list after update
-        else:
-            messages.error(request, 'There was an error updating the task. Please correct the errors below.')
-            return render(request, 'task_form.html', context={'form': form, 'action': '', 'button_action': 'Изменить'})
-
-
-class TaskDeleteView(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, NOT_AUTHORIZED_MESSAGE)
-            return redirect('login')
-        task = Task.objects.get(pk=kwargs.get('pk'))
-        if not task:
-            messages.error(request, 'Задача не найдена')
-            return redirect('task_list')
+    def dispatch(self, request, *args, **kwargs):
+        task = self.get_object()
         if task.author != request.user:
-            messages.error(request, 'Задачу может удалить только ее автор')
-            return redirect('task_list')  # добавить ошибку
-        return render(request, 'task_delete.html', context={'task': task})
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, NOT_AUTHORIZED_MESSAGE)
-            return redirect('login')
-        # Here you would handle the deletion of a task
-        task = Task.objects.get(pk=kwargs.get('pk'))
-        if task.author != request.user:
-            messages.error(request, 'Задачу может удалить только ее автор')
-            return redirect('task_list')  # добавить ошибку
-        task.delete()
+            messages.error(request, 'Задачу может удалить только её автор')
+            return redirect('task_list')
+        return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
         messages.success(request, 'Задача успешно удалена')
-        return redirect('task_list')  # Redirect to the task list after deletion
+        return super().delete(request, *args, **kwargs)
