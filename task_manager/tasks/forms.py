@@ -13,19 +13,18 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name', 'description', 'status', 'assignee', 'tags']
+        fields = ['name', 'description', 'status', 'executor', 'tags']
         labels = {
             'name': 'Имя',
             'description': 'Описание',
             'status': 'Статус',
-            'assignee': 'Исполнитель',
+            'executor': 'Исполнитель',
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'placeholder': 'Имя'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Описание'})
-        self.fields['assignee'].queryset = User.objects.all()
         for name, field in self.fields.items():
             widget = field.widget
 
