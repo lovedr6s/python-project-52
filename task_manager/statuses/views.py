@@ -65,7 +65,7 @@ class StatusUpdateView(MessageLoginRequiredMixin, StatusFormMixin, UpdateView):
 class StatusDeleteView(MessageLoginRequiredMixin, DeleteView):
     model = Status
     template_name = 'status_delete.html'
-    success_url = reverse_lazy('label_list')
+    success_url = reverse_lazy('status_list')
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
