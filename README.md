@@ -1,9 +1,12 @@
 <div align="center">
-<h1>Task Manager</h1>
-[![Actions Status](https://github.com/lovedr6s/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/lovedr6s/python-project-52/actions)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lovedr6s_python-project-52&metric=alert_status)](https://sonarcloud.io/dashboard?id=your_project_key)
-### [Url to the site](https://python-project-52-ptxg.onrender.com)
+  <h1>Task Manager</h1>
+  
+  [![Actions Status](https://github.com/lovedr6s/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/lovedr6s/python-project-52/actions)
+  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lovedr6s_python-project-52&metric=alert_status)](https://sonarcloud.io/dashboard?id=lovedr6s_python-project-52)
+
+  ### [Url to the site](https://python-project-52-ptxg.onrender.com)
 </div>
+
 
 ## About
 Task Manager is a web application built with Python and Django framework. It allows you to make tasks, change their statues. The app can be used with more than just one person.
