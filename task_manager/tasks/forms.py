@@ -1,7 +1,7 @@
 from django import forms
 from .models import Task
 from task_manager.labels.models import Label
-
+from django.contrib.auth.models import User
 
 class TaskForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
@@ -25,6 +25,7 @@ class TaskForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'placeholder': 'Имя'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Описание'})
+        self.fields['assignee'].queryset = User.objects.all()
         for name, field in self.fields.items():
             widget = field.widget
 
