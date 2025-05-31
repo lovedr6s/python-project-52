@@ -6,6 +6,7 @@ from .filters import TaskFilter
 from .models import Task
 from .forms import TaskForm
 
+NOT_AUTHORIZED_MESSAGE = 'Вы не авторизованы! Пожалуйста, выполните вход.'
 
 class TaskListView(FilterView):
     model = Task
@@ -15,14 +16,14 @@ class TaskListView(FilterView):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         return super().dispatch(request, *args, **kwargs)
 
 class TaskDetailView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         task = Task.objects.get(pk=kwargs.get('pk'))
         if not task:
@@ -34,14 +35,14 @@ class TaskDetailView(View):
 class TaskCreateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         form = TaskForm()
         return render(request, 'task_form.html', context={'form': form, 'action': 'Создать задачу', 'button_action': 'Создать'})
     
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         form = TaskForm(request.POST)
         if form.is_valid():
@@ -59,7 +60,7 @@ class TaskCreateView(View):
 class TaskUpdateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         task = Task.objects.get(pk=kwargs.get('pk'))
         form = TaskForm(instance=task)
@@ -69,7 +70,7 @@ class TaskUpdateView(View):
     def post(self, request, *args, **kwargs):
         # Here you would handle the form submission to update a task
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         form = TaskForm(request.POST, instance=Task.objects.get(pk=kwargs.get('pk')))
         if form.is_valid():
@@ -85,7 +86,7 @@ class TaskUpdateView(View):
 class TaskDeleteView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         task = Task.objects.get(pk=kwargs.get('pk'))
         if not task:
@@ -97,7 +98,7 @@ class TaskDeleteView(View):
         return render(request, 'task_delete.html', context={'task': task})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         # Here you would handle the deletion of a task
         task = Task.objects.get(pk=kwargs.get('pk'))

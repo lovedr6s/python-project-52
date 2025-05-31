@@ -5,11 +5,12 @@ from task_manager.tasks.models import Task
 from .forms import StatusForm
 from django.contrib import messages
 
+NOT_AUTHORIZED_MESSAGE = 'Вы не авторизованы! Пожалуйста, выполните вход.'
 
 class StatusListView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         statuses = Status.objects.all()
         return render(request, 'status_list.html', context={'statuses': statuses})
@@ -18,13 +19,13 @@ class StatusListView(View):
 class StatusCreateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         form = StatusForm()
         return render(request, 'status_form.html', context={'form': form, 'action': 'Создать статус', 'button_action': 'Создать'})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         form = StatusForm(request.POST)
         if form.is_valid():
@@ -39,13 +40,13 @@ class StatusCreateView(View):
 class StatusUpdateView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         form = StatusForm(instance=Status.objects.get(pk=kwargs['pk']))
         return render(request, 'status_form.html', context={'form': form, 'action': 'Изменение статуса', 'button_action': 'Изменить'})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         status = Status.objects.get(pk=kwargs['pk'])
         form = StatusForm(request.POST, instance=status)
@@ -61,7 +62,7 @@ class StatusUpdateView(View):
 class StatusDeleteView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+            messages.error(request, NOT_AUTHORIZED_MESSAGE)
             return redirect('login')
         status = Status.objects.get(pk=kwargs['pk'])
         if not status:
@@ -70,7 +71,7 @@ class StatusDeleteView(View):
         return render(request, 'status_delete.html', context={'status': status})
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-                    messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+                    messages.error(request, NOT_AUTHORIZED_MESSAGE)
                     return redirect('login')
         if Status.objects.get(pk=kwargs['pk']).tasks.exists():
             messages.error(request, 'Невозможно удалить статус, потому что он используется')

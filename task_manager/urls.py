@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import *
+from .views import HomeView
 from task_manager.users.forms import CustomAuthForm
 from task_manager.users.views import CustomLoginView, CustomLogoutView
 

@@ -1,88 +1,78 @@
-from django.shortcuts import render, redirect
-from django.views import View
-from .models import Label 
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.contrib import messages
+from .models import Label
 from .forms import LabelForm
-from django.contrib import messages 
-# Create your views here.
-# МЕТКИ МОЖНО СОЗДАВАТЬ ТОЛЬКО ТУТ!!! В TASKS ЗАПРЕТИТЬ ВПИСЫВАТЬ И ДАТЬ ТОЛЬКО ВЫБИРАТЬ ИЗ ДОБАВЛЕННЫХ ТУТ
-
-class LabelViews(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
-            return redirect('login')
-        labels = Label.objects.all()
-        return render(request, 'label_list.html', context={'labels': labels})
 
 
-class LabelCreateView(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
-            return redirect('login')
-        form = LabelForm()
-        return render(request, 'label_form.html', context={'form': form, 'action': 'Создать метку', 'button_action': 'Создать'})
+class MessageLoginRequiredMixin(LoginRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'home'
+
+    def handle_no_permission(self):
+        messages.error(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+        return redirect(self.login_url)
+
+
+class LabelListView(MessageLoginRequiredMixin, ListView):
+    model = Label
+    template_name = 'label_list.html'
+    context_object_name = 'labels'
+
+
+class LabelFormMixin:
+    form_class = LabelForm
+    template_name = 'label_form.html'
+    success_url = reverse_lazy('label_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action'] = getattr(self, 'action_label', 'Действие')
+        context['button_action'] = getattr(self, 'button_label', 'Сохранить')
+        return context
+
+
+class LabelCreateView(MessageLoginRequiredMixin, LabelFormMixin, CreateView):
+    model = Label
+    action_label = 'Создать метку'
+    button_label = 'Создать'
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Метка успешно создана')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Ошибка при создании метки. Исправьте ошибки ниже.')
+        return super().form_invalid(form)
+
+
+class LabelUpdateView(MessageLoginRequiredMixin, LabelFormMixin, UpdateView):
+    model = Label
+    action_label = 'Изменение метки'
+    button_label = 'Изменить'
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Метка успешно изменена')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Ошибка при изменении метки. Исправьте ошибки ниже.')
+        return super().form_invalid(form)
+
+
+class LabelDeleteView(MessageLoginRequiredMixin, DeleteView):
+    model = Label
+    template_name = 'label_delete.html'
+    success_url = reverse_lazy('label_list')
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
-            return redirect('login')
-        form = LabelForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Метка успешно создана')
-            return redirect('label_list')
-        else:
-            messages.error(request, 'There was an error creating the label. Please correct the errors below.')
-            return request(request, 'label_form.html', context={'form': form, 'action': 'Создать метку', 'button_action': 'Создать'})
+        self.object = self.get_object()
 
-
-class LabelUpdateView(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
-            return redirect('login')
-        form = LabelForm(instance=Label.objects.get(pk=kwargs.get('pk')))
-        if not form:
-            messages.error(request, 'Метка не найдена')
-            return redirect('label_list')
-        
-        return render(request, 'label_form.html', context={'form': form, 'action': 'Изменение метки', 'button_action': 'Изменить'})
-
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
-            return redirect('login')
-        form = LabelForm(request.POST, instance=Label.objects.get(pk=kwargs.get('pk')))
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Метка успешно изменена')
-            return redirect('label_list')
-        else:
-            messages.error(request, 'There was an error updating the label. Please correct the errors below.')
-            return render(request, 'label_form.html', context={'form': form, 'action': 'Изменение метки', 'button_action': 'Изменить'})
-
-
-class LabelDeleteView(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
-            return redirect('login')
-        label = Label.objects.get(pk=kwargs.get('pk'))
-        if not label:
-            messages.error(request, 'Метка не найдена')
-            return redirect('label_list')
-        return render(request, 'label_delete.html', context={'label': label})
-    
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
-            return redirect('login')
-        #получить все теги из tasks и если есть теги с этим label, то не удалять
-        if Label.objects.get(pk=kwargs.get('pk')).tasks.exists():
+        if self.object.tasks.exists():
             messages.error(request, 'Невозможно удалить метку, потому что она используется')
-            return redirect('label_list')
-        label = Label.objects.get(pk=kwargs.get('pk'))
-        label.delete()
+            return redirect(self.success_url)
+
         messages.success(request, 'Метка успешно удалена')
-        return redirect('label_list')
+        return self.delete(request, *args, **kwargs)
