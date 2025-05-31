@@ -38,6 +38,13 @@ class UserCreateView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, 'Ошибка при регистрации. Исправьте ошибки ниже.')
         return super().form_invalid(form)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'action': 'Регистрация',
+            'button_action': 'Зарегистрировать',
+        })
+        return context
 
 
 class UserUpdateView(MessageLoginRequiredMixin, UpdateView):
@@ -61,6 +68,13 @@ class UserUpdateView(MessageLoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         messages.error(self.request, 'Ошибка при изменении пользователя. Исправьте ошибки ниже.')
         return super().form_invalid(form)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'action': 'Изменение пользователя',
+            'button_action': 'Изменить',
+        })
+        return context
 
 
 class UserDeleteView(MessageLoginRequiredMixin, DeleteView):
