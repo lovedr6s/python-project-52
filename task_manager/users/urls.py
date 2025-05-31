@@ -1,7 +1,5 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views
-from .forms import CustomAuthForm
-from .views import *
+from .views import UserListView, UserCreateView, UserUpdateView, UserDeleteView
 
 
 urlpatterns = [
