@@ -19,7 +19,7 @@ Why not just let [Docker Compose](https://docs.docker.com/compose/) do all the w
 
 Clone the project:
 ```bash
->> git clone https://github.com/ivnvxd/python-project-52.git && cd python-project-52
+>> git clone https://github.com/lovedr6s/python-project-52.git && cd python-project-52
 ```
 
 Create `.env` file in the root folder and add following variables:
