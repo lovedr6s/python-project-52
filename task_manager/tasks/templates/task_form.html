@@ -7,24 +7,28 @@
     {% csrf_token %}
     {% for field in form %}
         <div class="mb-3">
-            
-            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}
-
-            {% if field.widget.input_type == "checkbox" or field.name == "tags" %}
-            <div style="max-height: 150px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 0.375rem; padding: 0.5rem;">
-                {% for checkbox in field %}
-                    <div class="form-check">
-                        {{ checkbox.tag }}
-                        <label class="form-check-label" for="{{ checkbox.id_for_label }}">
-                            {{ checkbox.choice_label }}
-                        </label>
-                    </div>
-                {% endfor %}
-            </div>
+            {% if field.name == "executor" %}
+                <label class="form-label" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {{ field }}
+                </label>
+            {% elif field.widget.input_type == "checkbox" or field.name == "tags" %}
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <div style="max-height: 150px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 0.375rem; padding: 0.5rem;">
+                    {% for checkbox in field %}
+                        <div class="form-check">
+                            {{ checkbox.tag }}
+                            <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                {{ checkbox.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
             {% else %}
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
             {% endif %}
-            </label>
+
             {% if field.help_text %}
                 <div class="form-text">{{ field.help_text }}</div>
             {% endif %}
