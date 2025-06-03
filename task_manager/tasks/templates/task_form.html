@@ -8,10 +8,7 @@
     {% for field in form %}
         <div class="mb-3">
             {% if field.name == "executor" %}
-                <label class="form-label" for="{{ field.id_for_label }}">
-                    {{ field.label }}
-                    {{ field }}
-                </label>
+                <label class="form-label" for="{{ field.id_for_label }}">Исполнитель{{ field }}</label>
             {% elif field.widget.input_type == "checkbox" or field.name == "tags" %}
                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                 <div style="max-height: 150px; overflow-y: auto; border: 1px solid #ced4da; border-radius: 0.375rem; padding: 0.5rem;">
