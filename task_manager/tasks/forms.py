@@ -1,6 +1,8 @@
 from django import forms
 from .models import Task
+from django.utils.translation import gettext_lazy as _
 from task_manager.labels.models import Label
+from task_manager.statuses.models import Status
 from django.contrib.auth.models import User
 
 class TaskForm(forms.ModelForm):
@@ -14,28 +16,38 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['name', 'description', 'status', 'executor', 'tags']
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('Имя'),
+                }
+            ),
+            'description': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('Описание'),
+                }
+            ),
+            'status': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'choices': Status,
+                }
+            ),
+            'executor': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'choices': User,
+                }
+            )
+        }
         labels = {
             'name': 'Имя',
             'description': 'Описание',
             'status': 'Статус',
             'executor': 'Исполнитель',
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'placeholder': 'Имя'})
-        self.fields['description'].widget.attrs.update({'placeholder': 'Описание'})
-        self.fields['executor'].widget.attrs.update({'class': 'form-select', 'id': 'id_executor', 'aria-label': 'Исполнитель'})
-        for name, field in self.fields.items():
-            widget = field.widget
-
-            if isinstance(widget, forms.CheckboxSelectMultiple):
-                widget.attrs.update({'class': 'form-check-input'})
-            elif isinstance(widget, forms.Select):
-                widget.attrs.update({'class': 'form-select'})
-            else:
-                widget.attrs.update({'class': 'form-control'})
-
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if Task.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
