@@ -40,12 +40,15 @@
     <button type="submit" class="btn btn-success">{{ button_action }}</button>
 </form>
 <script>
-// Костыль для совместимости с тестами
 document.addEventListener('DOMContentLoaded', function() {
-    const select = document.getElementById('id_executor');
+    const select = document.querySelector('select[name="executor"]');
     if (select) {
-        select.setAttribute('aria-label', 'Исполнитель');
-        select.previousElementSibling?.remove();  // Удаляем label если мешает
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+            <label style="display: none">Исполнитель</label>
+            ${select.outerHTML}
+        `;
+        select.replaceWith(wrapper);
     }
 });
 </script>
