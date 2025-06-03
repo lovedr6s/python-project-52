@@ -25,6 +25,7 @@ class TaskForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'placeholder': 'Имя'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Описание'})
+        self.fields['executor'].widget.attrs.update({'class': 'form-select', 'id': 'id_executor', 'aria-label': 'Исполнитель'})
         for name, field in self.fields.items():
             widget = field.widget
 
