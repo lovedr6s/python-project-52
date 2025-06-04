@@ -6,7 +6,7 @@ from task_manager.statuses.models import Status
 
 
 class TaskForm(forms.ModelForm):
-    tags = forms.ModelMultipleChoiceField(
+    labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         required=False,
@@ -15,7 +15,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name', 'description', 'status', 'executor', 'tags']
+        fields = ['name', 'description', 'status', 'executor', 'labels']
         widgets = {
             'name': forms.TextInput(
                 attrs={
