@@ -13,7 +13,12 @@ class TaskForm(forms.ModelForm):
         required=False,
         label='Метки',
     )
-
+    executor = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False,
+        label='Исполнитель'
+    )
     class Meta:
         model = Task
         fields = ['name', 'description', 'status', 'executor', 'labels']
