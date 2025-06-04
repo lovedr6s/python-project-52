@@ -36,9 +36,9 @@ class TaskForm(forms.ModelForm):
                 }
             ),
             'executor': forms.Select(
+                choices=[(user.pk, user.get_full_name()) for user in User.objects.all()],
                 attrs={
                     'class': 'form-control',
-                    'choices': User,
                 }
             )
         }
