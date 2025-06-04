@@ -3,6 +3,7 @@ from .models import Task
 from django.utils.translation import gettext_lazy as _
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
+from django.contrib.auth.models import User
 
 
 class TaskForm(forms.ModelForm):
@@ -32,7 +33,11 @@ class TaskForm(forms.ModelForm):
             'status': forms.Select(
                 attrs={
                     'class': 'form-control',
-                    'choices': Status,
+                }
+            ),
+            'executor': forms.Select(
+                attrs={
+                    'class': 'form-control',
                 }
             )
         }
@@ -42,15 +47,8 @@ class TaskForm(forms.ModelForm):
             'status': 'Статус',
             'executor': 'Исполнитель',
         }
-    def clean_name(self):
-        name = self.cleaned_data.get('name')
-        if Task.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
-            raise forms.ValidationError("Задача с таким именем уже существует.")
-        return name
 
-    def save(self, commit=True):
-        task = super().save(commit=False)
-        if commit:
-            task.save()
-            self.save_m2m()
-        return task
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['executor'].queryset = User.objects.all()
+        self.fields['status'].queryset = Status.objects.all()
