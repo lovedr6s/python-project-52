@@ -8,9 +8,9 @@ from task_manager.statuses.models import Status
 class TaskForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
         required=False,
-        label='Метки',
+        label=_('Метки'),
     )
 
     class Meta:
@@ -32,25 +32,30 @@ class TaskForm(forms.ModelForm):
             'status': forms.Select(
                 attrs={
                     'class': 'form-control',
-                    'choices': Status,
                 }
-            )
+            ),
+            'executor': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
         }
         labels = {
-            'name': 'Имя',
-            'description': 'Описание',
-            'status': 'Статус',
-            'executor': 'Исполнитель',
+            'name': _('Имя'),
+            'description': _('Описание'),
+            'status': _('Статус'),
+            'executor': _('Исполнитель'),
+            'tags': _('Метки'),
         }
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if Task.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
-            raise forms.ValidationError("Задача с таким именем уже существует.")
+            raise forms.ValidationError(_("Задача с таким именем уже существует."))
         return name
 
     def save(self, commit=True):
-        task = super().save(commit=False)
+        task = super().save(commit=commit)
         if commit:
-            task.save()
             self.save_m2m()
         return task
