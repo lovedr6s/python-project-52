@@ -7,9 +7,9 @@ from task_manager.statuses.models import Status  # Assuming Statuses is a model 
 class Task(models.Model):
     name = models.CharField(max_length=255)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True, blank=True, related_name='tasks')  # ForeignKey to Statuses model
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='authored_tasks')
-    executor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='tasks')  # Assuming creator is a username
-    tags = models.ManyToManyField(Label, blank=True, related_name='tasks')  # Many-to-many relationship  Label
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='author')
+    executor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='executor')  # Assuming creator is a username
+    tags = models.ManyToManyField(Label, blank=True, related_name='tags')  # Many-to-many relationship  Label
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
