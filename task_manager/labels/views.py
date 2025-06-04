@@ -70,7 +70,7 @@ class LabelDeleteView(MessageLoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        if self.object.tasks.exists():
+        if self.object.tags.exists():
             messages.error(request, 'Невозможно удалить метку, потому что она используется')
             return redirect(self.success_url)
 
