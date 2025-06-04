@@ -50,7 +50,7 @@
                 <td><a href="{% url 'task_detail' task.id%}">{{ task.name }}</a></td>
                 <td>{{ task.status }}</td>
                 <td>{{ task.author }}</td>
-                <td>{{ task.assignee }}</td>
+                <td>{{ task.executor }}</td>
                 <td>{{ task.created_at }}</td>
                 <td>
                     <a href="{% url 'task_update' task.id %}" class="btn btn-warning">Изменить</a>
