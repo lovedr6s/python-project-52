@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 class TaskForm(forms.ModelForm):
     labels = forms.ModelMultipleChoiceField(
         queryset=Label.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
         required=False,
         label='Метки',
     )
