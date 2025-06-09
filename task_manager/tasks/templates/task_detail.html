@@ -6,8 +6,8 @@
 <h1>Просмотр задачи</h1>
 <p><strong>Имя:</strong> {{ task.name }}</p>
 <p><strong>Описание:</strong> {{ task.description }}</p>
-<p><strong>Автор:</strong> {{ task.author }}</p>
-<p><strong>Исполнитель:</strong> {{ task.executor }}</p>
+<p><strong>Автор:</strong> {{ task.author.first_name }} {{ task.author.last_name }}</p>
+<p><strong>Исполнитель:</strong> {{ task.executor.first_name }} {{ task.executor.last_name }}</p>
 <p><strong>Статус:</strong> {{ task.status }}</p>
 <p><strong>Метки:</strong>
   {% for label in task.labels.all %}
