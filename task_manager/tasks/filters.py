@@ -7,16 +7,16 @@ from django.contrib.auth.models import User
 
 class TaskFilter(filters.FilterSet):
     status = filters.ModelChoiceFilter(queryset=Status.objects.all(), label='Статус')
-    assignee = filters.ModelChoiceFilter(queryset=User.objects.all(), label='Исполнитель')
-    labels = filters.ModelChoiceFilter(queryset=Label.objects.all(), field_name='tags', label='Метка')
-    my_tasks_only = filters.BooleanFilter(
+    executor = filters.ModelChoiceFilter(queryset=User.objects.all(), label='Исполнитель')
+    label = filters.ModelChoiceFilter(queryset=Label.objects.all(), field_name='label', label='Метка')
+    self_tasks = filters.BooleanFilter(
         label='Только свои задачи',
         widget=forms.CheckboxInput,
         method='filter_my_tasks',
     )
     class Meta:
         model = Task
-        fields = ['status', 'assignee', 'labels', 'my_tasks_only']
+        fields = ['status', 'executor', 'label', 'self_tasks']
 
     def filter_my_tasks(self, queryset, name, value):
         if value:
