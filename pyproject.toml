@@ -17,6 +17,7 @@ dependencies = [
     "pytest-playwright>=0.7.0",
     "python-dotenv>=1.1.0",
     "rollbar>=1.3.0",
+    "ruff>=0.11.13",
     "whitenoise>=6.9.0",
 ]
 [build-system]
@@ -25,3 +26,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["task_manager"]
+
+[tool.ruff]
+lint.select = ["E", "F", "W", "B", "I"]
+line-length = 88
+exclude = ["**/migrations/**", 'settings.py']

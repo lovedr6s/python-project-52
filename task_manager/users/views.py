@@ -1,13 +1,15 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from .forms import UserForm
-from task_manager.tasks.models import Task
 from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+
+from task_manager.tasks.models import Task
+
+from .forms import UserForm
 
 
 class MessageLoginRequiredMixin(LoginRequiredMixin):
@@ -55,7 +57,8 @@ class UserUpdateView(MessageLoginRequiredMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         if str(request.user.pk) != str(kwargs.get('pk')):
-            messages.error(request, 'У вас нет прав для изменения другого пользователя.')
+            messages.error(request,
+                           'У вас нет прав для изменения другого пользователя.')
             return redirect('user_list')
         return super().dispatch(request, *args, **kwargs)
 
@@ -66,7 +69,8 @@ class UserUpdateView(MessageLoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Ошибка при изменении пользователя. Исправьте ошибки ниже.')
+        messages.error(self.request,
+                       'Ошибка при изменении пользователя. Исправьте ошибки ниже.')
         return super().form_invalid(form)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -85,7 +89,8 @@ class UserDeleteView(MessageLoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         if str(self.object.pk) != str(request.user.pk):
-            messages.error(request, 'У вас нет прав для изменения другого пользователя.')
+            messages.error(request,
+                           'У вас нет прав для изменения другого пользователя.')
             return redirect('user_list')
         if Task.objects.filter(author=self.object).exists():
             messages.error(request, 'У вас нет прав для изменения')
