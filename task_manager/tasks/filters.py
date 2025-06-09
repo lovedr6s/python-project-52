@@ -25,3 +25,4 @@ class TaskFilter(filters.FilterSet):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.form.label_suffix = ''
+        self.form.fields['executor'].label_from_instance = lambda obj: f"{obj.first_name} {obj.last_name}"
