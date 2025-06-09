@@ -9,17 +9,19 @@
     <form method="get">
         <div class="row g-3 align-items-center">
         <div class="col-md-3">
-            {{ filter.form.status.label_tag }}
-            {{ filter.form.status }}
-        </div>
-        <div class="col-md-3">
-            {{ filter.form.assignee.label_tag }}
-            {{ filter.form.assignee }}
-        </div>
-        <div class="col-md-3">
-            {{ filter.form.labels.label_tag }}
-            {{ filter.form.labels }}
-        </div>
+            <div class="col-md-3 mb-3">
+                {{ filter.form.status.label_tag }}
+                {{ filter.form.status }}
+            </div>
+            <div class="col-md-3 mb-3">
+                {{ filter.form.executor.label_tag }}
+                {{ filter.form.executor }}
+            </div>
+            <div class="col-md-3 mb-3">
+                {{ filter.form.label.label_tag }}
+                {{ filter.form.label }}
+            </div>
+            </div>
         </div>
         <div class="col-md-2 mt-4">
             {{ filter.form.self_tasks.label_tag }}
