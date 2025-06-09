@@ -85,10 +85,10 @@ class UserDeleteView(MessageLoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         if str(self.object.pk) != str(request.user.pk):
-            messages.error(request, 'У вас нет прав для удаления другого пользователя.')
+            messages.error(request, 'У вас нет прав для изменения другого пользователя.')
             return redirect('user_list')
         if Task.objects.filter(author=self.object).exists():
-            messages.error(request, 'Невозможно удалить пользователя, потому что он используется.')
+            messages.error(request, 'У вас нет прав для изменения')
             return redirect('user_list')
         return super().dispatch(request, *args, **kwargs)
 
