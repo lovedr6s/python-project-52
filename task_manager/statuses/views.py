@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import (CreateView, DeleteView,
+                                  ListView, UpdateView)
 
 from .forms import StatusForm
 from .models import Status
@@ -13,8 +14,10 @@ class MessageLoginRequiredMixin(LoginRequiredMixin):
     redirect_field_name = 'home'
 
     def handle_no_permission(self):
-        messages.error(self.request,
-                       'Вы не авторизованы! Пожалуйста, выполните вход.')
+        messages.error(
+            self.request,
+            'Вы не авторизованы! Пожалуйста, выполните вход.'
+            )
         return redirect(self.login_url)
 
 
@@ -50,8 +53,10 @@ class StatusCreateView(MessageLoginRequiredMixin, StatusFormMixin, CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request,
-                       'Ошибка при создании статуса. Исправьте ошибки ниже.')
+        messages.error(
+            self.request,
+            'Ошибка при создании статуса. Исправьте ошибки ниже.'
+            )
         return super().form_invalid(form)
 
 
@@ -66,8 +71,10 @@ class StatusUpdateView(MessageLoginRequiredMixin, StatusFormMixin, UpdateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request,
-                       'Ошибка при изменении статуса. Исправьте ошибки ниже.')
+        messages.error(
+            self.request,
+            'Ошибка при изменении статуса. Исправьте ошибки ниже.'
+            )
         return super().form_invalid(form)
 
 
@@ -80,8 +87,10 @@ class StatusDeleteView(MessageLoginRequiredMixin, DeleteView):
         self.object = self.get_object()
 
         if self.object.tasks.exists():
-            messages.error(request,
-                           'Невозможно удалить статус, потому что она используется')
+            messages.error(
+                request,
+                'Невозможно удалить статус, потому что она используется'
+                )
             return redirect(self.success_url)
 
         messages.success(request, 'Статус успешно удален')

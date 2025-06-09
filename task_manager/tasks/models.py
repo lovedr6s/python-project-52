@@ -4,7 +4,6 @@ from django.db import models
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
 
-# Create your models here.
 
 class Task(models.Model):
     name = models.CharField(max_length=255)
@@ -26,5 +25,3 @@ class Task(models.Model):
                                     related_name='labels')
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
-

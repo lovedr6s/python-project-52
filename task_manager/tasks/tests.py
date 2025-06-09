@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from .models import Task
 
-# Create your tests here.
 
 class TaskViewTests(TestCase):
     def setUp(self):
@@ -30,15 +29,14 @@ class TaskViewTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Task.objects.filter(name='New Task').exists())
 
-
     def test_task_list(self):
         response = self.client.get(reverse('task_list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.task.name)
 
-
     def test_task_update(self):
-        response = self.client.post(reverse('task_update', args=[self.task.id]), {
+        response = self.client.post(reverse(
+            'task_update', args=[self.task.id]), {
             'name': 'Updated Task',
             'description': 'This task has been updated.',
         })
@@ -47,7 +45,9 @@ class TaskViewTests(TestCase):
         self.assertEqual(self.task.name, 'Updated Task')
 
     def test_task_delete(self):
-        response = self.client.post(reverse('task_delete', kwargs={'pk': self.task.id}))
+        response = self.client.post(reverse(
+            'task_delete', 
+            kwargs={'pk': self.task.id})
+            )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Task.objects.filter(id=self.task.id).exists())
-

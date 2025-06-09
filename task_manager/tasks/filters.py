@@ -28,6 +28,7 @@ class TaskFilter(filters.FilterSet):
         if value:
             return queryset.filter(author=self.request.user)
         return queryset
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.form.label_suffix = ''

@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from .models import Status
 
-# Create your tests here.
 
 class StatusCRUDTests(TestCase):
     def setUp(self):
