@@ -46,7 +46,7 @@ class TaskViewTests(TestCase):
 
     def test_task_delete(self):
         response = self.client.post(reverse(
-            'task_delete', 
+            'task_delete',
             kwargs={'pk': self.task.id})
             )
         self.assertEqual(response.status_code, 302)

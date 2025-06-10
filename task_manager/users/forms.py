@@ -10,6 +10,7 @@ class UserForm(forms.ModelForm):
     password2 = forms.CharField(label='Подтверждение пароля',
                                 widget=forms.PasswordInput,
                                 min_length=8)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update(
@@ -69,6 +70,7 @@ class UserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
 
 class CustomAuthForm(AuthenticationForm):
     username = forms.CharField(label='Имя пользователя',

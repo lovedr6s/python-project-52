@@ -23,12 +23,10 @@ class UserCRUDTests(TestCase):
         self.assertEqual(respone.status_code, 302)
         self.assertTrue(User.objects.filter(username='newuser').exists())
 
-
     def test_user_list(self):
         response = self.client.get(reverse('user_list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.user.username)
-
 
     def test_user_update(self):
         response = self.client.post(reverse('user_update', args=[self.user.id]), {
@@ -41,6 +39,7 @@ class UserCRUDTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, 'updateduser')
+
     def test_user_delete(self):
         response = self.client.post(reverse('user_delete', kwargs={'pk': self.user.id}))
         self.assertEqual(response.status_code, 302)
