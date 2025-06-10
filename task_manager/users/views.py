@@ -138,6 +138,10 @@ class CustomLoginView(LoginView):
         messages.success(self.request, 'Вы залогинены')
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        messages.error(self.request, 'Ошибка при входе. Проверьте данные.')
+        return super().form_invalid(form)
+
 
 class CustomLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
