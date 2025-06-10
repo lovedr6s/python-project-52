@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # скачиваем uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
-source /opt/render/.local/bin
+source $HOME/.local/bin/activate
 
 # здесь добавьте все необходимые команды для установки вашего проекта
 # команду установки зависимостей, сборки статики, применения миграций и другие
