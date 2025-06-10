@@ -17,7 +17,10 @@ class MessageLoginRequiredMixin(LoginRequiredMixin):
     redirect_field_name = 'home'
 
     def handle_no_permission(self):
-        messages.error(self.request, 'Вы не авторизованы! Пожалуйста, выполните вход.')
+        messages.error(
+                self.request,
+                'Вы не авторизованы! Пожалуйста, выполните вход.'
+            )
         return redirect(self.login_url)
 
 
@@ -34,11 +37,17 @@ class UserCreateView(CreateView):
     success_url = reverse_lazy('login')
 
     def form_valid(self, form):
-        messages.success(self.request, 'Пользователь успешно зарегистрирован')
+        messages.success(
+            self.request,
+            'Пользователь успешно зарегистрирован'
+        )
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Ошибка при регистрации. Исправьте ошибки ниже.')
+        messages.error(
+            self.request,
+            'Ошибка при регистрации. Исправьте ошибки ниже.'
+        )
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
@@ -58,20 +67,27 @@ class UserUpdateView(MessageLoginRequiredMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         if str(request.user.pk) != str(kwargs.get('pk')):
-            messages.error(request,
-                           'У вас нет прав для изменения другого пользователя.')
+            messages.error(
+                request,
+                'У вас нет прав для изменения другого пользователя.'
+            )
             return redirect('user_list')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         user = form.save()
         update_session_auth_hash(self.request, user)
-        messages.success(self.request, 'Пользователь успешно изменен')
+        messages.success(
+            self.request,
+            'Пользователь успешно изменен'
+        )
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request,
-                       'Ошибка при изменении пользователя. Исправьте ошибки ниже.')
+        messages.error(
+            self.request,
+            'Ошибка при изменении пользователя. Исправьте ошибки ниже.'
+        )
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
@@ -91,16 +107,24 @@ class UserDeleteView(MessageLoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         if str(self.object.pk) != str(request.user.pk):
-            messages.error(request,
-                           'У вас нет прав для изменения другого пользователя.')
+            messages.error(
+                request,
+                'У вас нет прав для изменения другого пользователя.'
+                )
             return redirect('user_list')
         if Task.objects.filter(author=self.object).exists():
-            messages.error(request, 'У вас нет прав для изменения')
+            messages.error(
+                request,
+                'У вас нет прав для изменения'
+            )
             return redirect('user_list')
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        messages.success(request, 'Пользователь успешно удален')
+        messages.success(
+            request,
+            'Пользователь успешно удален'
+        )
         return super().post(request, *args, **kwargs)
 
 

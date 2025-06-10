@@ -29,18 +29,22 @@ class UserCRUDTests(TestCase):
         self.assertContains(response, self.user.username)
 
     def test_user_update(self):
-        response = self.client.post(reverse('user_update', args=[self.user.id]), {
-            'username': 'updateduser',
-            'first_name': 'Updated',
-            'last_name': 'User',
-            'password1': 'updatedpassword',
-            'password2': 'updatedpassword'
-        })
+        response = self.client.post(reverse(
+            'user_update',
+            args=[self.user.id]), {
+                'username': 'updateduser',
+                'first_name': 'Updated',
+                'last_name': 'User',
+                'password1': 'updatedpassword',
+                'password2': 'updatedpassword'
+            })
         self.assertEqual(response.status_code, 302)
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, 'updateduser')
 
     def test_user_delete(self):
-        response = self.client.post(reverse('user_delete', kwargs={'pk': self.user.id}))
+        response = self.client.post(reverse(
+            'user_delete',
+            kwargs={'pk': self.user.id}))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(User.objects.filter(id=self.user.id).exists())
