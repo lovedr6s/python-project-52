@@ -17,7 +17,8 @@ class MessageLoginRequiredMixin(LoginRequiredMixin):
     def handle_no_permission(self):
         messages.error(
             self.request,
-            'Вы не авторизованы! Пожалуйста, выполните вход.')
+            'Вы не авторизованы! Пожалуйста, выполните вход.'
+        )
         return redirect(self.login_url)
 
 
@@ -44,20 +45,23 @@ class TaskCreateView(MessageLoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         messages.success(
             self.request,
-            'Задача успешно создана')
+            'Задача успешно создана'
+        )
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(
             self.request,
-            'Ошибка при создании задачи. Проверьте форму.')
+            'Ошибка при создании задачи. Проверьте форму.'
+        )
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'action': 'Создать задачу',
-            'button_action': 'Создать'})
+            'button_action': 'Создать'
+        })
         return context
 
 
@@ -72,27 +76,31 @@ class TaskUpdateView(MessageLoginRequiredMixin, UpdateView):
         if task.author != request.user:
             messages.error(
                 request,
-                'Вы не можете редактировать чужую задачу')
+                'Вы не можете редактировать чужую задачу'
+            )
             return redirect('task_list')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         messages.success(
             self.request,
-            'Задача успешно изменена')
+            'Задача успешно изменена'
+        )
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(
             self.request,
-            'Ошибка при изменении задачи. Проверьте форму.')
+            'Ошибка при изменении задачи. Проверьте форму.'
+        )
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'action': 'Изменение задачи',
-            'button_action': 'Изменить'})
+            'button_action': 'Изменить'
+        })
         return context
 
 
@@ -106,7 +114,8 @@ class TaskDeleteView(MessageLoginRequiredMixin, DeleteView):
         if self.object.author != request.user:
             messages.error(
                 request,
-                'Задачу может удалить только ее автор')
+                'Задачу может удалить только ее автор'
+            )
             return redirect(self.success_url)
         return super().get(request, *args, **kwargs)
 
@@ -116,10 +125,12 @@ class TaskDeleteView(MessageLoginRequiredMixin, DeleteView):
         if self.object.author != request.user:
             messages.error(
                 request,
-                'Задачу может удалить только ее автор')
+                'Задачу может удалить только ее автор'
+            )
             return redirect(self.success_url)
 
         messages.success(
             request,
-            'Задача успешно удалена')
+            'Задача успешно удалена'
+        )
         return self.delete(request, *args, **kwargs)

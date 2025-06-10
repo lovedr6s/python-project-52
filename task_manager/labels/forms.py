@@ -15,7 +15,8 @@ class LabelForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({
             'placeholder': 'Имя',
-            'class': 'form-control'})
+            'class': 'form-control'
+        })
 
     def clean_name(self):
         name = self.cleaned_data.get('name')

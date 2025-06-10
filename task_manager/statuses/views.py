@@ -33,12 +33,16 @@ class StatusFormMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['action'] = getattr(self,
-                                    'action_label',
-                                    'Изменить')
-        context['button_action'] = getattr(self,
-                                           'button_label',
-                                           'Сохранить')
+        context['action'] = getattr(
+            self,
+            'action_label',
+            'Изменить'
+        )
+        context['button_action'] = getattr(
+            self,
+            'button_label',
+            'Сохранить'
+        )
         return context
 
 
@@ -65,8 +69,9 @@ class StatusUpdateView(MessageLoginRequiredMixin, StatusFormMixin, UpdateView):
     button_label = 'Изменить'
 
     def form_valid(self, form):
-        messages.success(self.request,
-                         'Статус успешно изменена')
+        messages.success(
+            self.request, 'Статус успешно изменена'
+        )
         return super().form_valid(form)
 
     def form_invalid(self, form):

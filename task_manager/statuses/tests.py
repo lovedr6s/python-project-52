@@ -13,13 +13,20 @@ class StatusCRUDTests(TestCase):
             username='testuser',
             first_name='name',
             last_name='last_name',
-            password='testpassword')
-        self.client.login(username='testuser',
-                          password='testpassword')
+            password='testpassword'
+        )
+        self.client.login(
+            username='testuser',
+            password='testpassword'
+        )
 
     def test_status_create(self):
-        response = self.client.post(reverse('status_create'),
-                                    {'name': 'New Status'})
+        response = self.client.post(
+            reverse('status_create'),
+            {
+                'name': 'New Status'
+            }
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Status.objects.filter(name='New Status').exists())
 
@@ -29,18 +36,26 @@ class StatusCRUDTests(TestCase):
         self.assertContains(response, self.status.name)
 
     def test_status_update(self):
-        response = self.client.post(reverse(
-            'status_update',
-            args=[self.status.id]),
-            {'name': 'Updated Status'})
+        response = self.client.post(
+            reverse(
+                'status_update',
+                args=[self.status.id]
+            ),
+            {
+                'name': 'Updated Status'
+            }
+        )
         self.assertEqual(response.status_code, 302)
         self.status.refresh_from_db()
         self.assertEqual(self.status.name, 'Updated Status')
 
     def test_status_delete(self):
-        response = self.client.post(reverse(
-            'status_delete',
-            kwargs={'pk': self.status.id}))
+        response = self.client.post(
+            reverse(
+                'status_delete',
+                kwargs={'pk': self.status.id}
+            )
+        )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Status.objects.filter(id=self.status.id).exists())
 

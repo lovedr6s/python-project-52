@@ -30,11 +30,15 @@ urlpatterns = [
     path('statuses/', include('task_manager.statuses.urls')),
     path('labels/', include('task_manager.labels.urls')),
     path('logout/', CustomLogoutView.as_view(next_page='home'), name='logout'),
-    path('login/', CustomLoginView.as_view(
-        template_name='login.html',
-        redirect_authenticated_user=True,
-        next_page='home',
-        authentication_form=CustomAuthForm),
-        name='login'),
+    path(
+        'login/',
+        CustomLoginView.as_view(
+            template_name='login.html',
+            redirect_authenticated_user=True,
+            next_page='home',
+            authentication_form=CustomAuthForm
+        ),
+        name='login'
+    ),
 
 ]

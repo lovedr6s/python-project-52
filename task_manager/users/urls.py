@@ -1,7 +1,10 @@
 from django.urls import path
 
 from .views import (
-    UserCreateView, UserDeleteView, UserListView, UserUpdateView
+    UserCreateView,
+    UserDeleteView,
+    UserListView,
+    UserUpdateView
 )
 
 urlpatterns = [
