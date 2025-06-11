@@ -32,7 +32,8 @@ urlpatterns = [
     path('logout/', CustomLogoutView.as_view(next_page='home'), name='logout'),
     path(
         'login/',
-        CustomLoginView.as_view(
+        CustomLoginView.as_view
+        (
             template_name='login.html',
             redirect_authenticated_user=True,
             next_page='home',
